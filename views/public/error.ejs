@@ -1,0 +1,13 @@
+<%- include('../partials/header') %>
+<section class="section">
+  <div class="container message-page">
+    <p class="message-page__code"><%= status %></p>
+    <h1 class="message-page__title"><%= status === 403 ? 'You cannot open this page' : 'Something went wrong' %></h1>
+    <p class="message-page__text"><%= message %></p>
+    <div class="message-page__actions">
+      <a class="btn btn--primary" href="/dashboard">Go to your dashboard</a>
+      <a class="btn btn--outline" href="/">Home page</a>
+    </div>
+  </div>
+</section>
+<%- include('../partials/footer') %>

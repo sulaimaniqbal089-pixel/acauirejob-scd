@@ -1,0 +1,254 @@
+<%- include('../partials/header') %>
+
+<section class="hero">
+  <div class="hero__glow" aria-hidden="true"></div>
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <div class="hero__eyebrow">
+        <span class="hero__pulse-dot"></span>
+        <span>Pakistan's Direct Recruitment Network</span>
+      </div>
+      <h1 class="hero__title">Find work across Pakistan, <span class="hero__title-accent">and always know where you stand.</span></h1>
+      <p class="hero__lead">Browse vacancies from employers in Lahore, Karachi, Islamabad and beyond. Apply with one CV, then follow each application from Pending to Hired.</p>
+
+      <form class="search-bar" action="/jobs" method="get" role="search">
+        <label class="search-bar__field search-bar__field--grow">
+          <span class="sr-only">Job title or keyword</span>
+          <%- icon('search') %>
+          <input type="search" name="keyword" placeholder="Job title, skill, or company..." maxlength="100" autocomplete="off">
+        </label>
+        <label class="search-bar__field">
+          <span class="sr-only">City</span>
+          <%- icon('pin') %>
+          <select name="city">
+            <option value="">All cities</option>
+            <% c.CITIES.forEach((city) => { %><option value="<%= city %>"><%= city %></option><% }) %>
+          </select>
+        </label>
+        <button class="btn btn--primary btn--lg search-bar__btn" type="submit">
+          <span>Search jobs</span>
+          <span class="btn__icon-pill" aria-hidden="true"><%- icon('arrow-right') %></span>
+        </button>
+      </form>
+
+      <% if (cities.length) { %>
+        <div class="hero__cities">
+          <span class="hero__cities-label">Hiring now in</span>
+          <div class="hero__cities-pills">
+            <% cities.forEach((city) => { %>
+              <a class="city-pill" href="/jobs?city=<%= encodeURIComponent(city.city) %>">
+                <%- icon('pin') %>
+                <span><%= city.city %></span>
+                <span class="count"><%= city.total %></span>
+              </a>
+            <% }) %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+
+    <aside class="board" aria-label="Just posted">
+      <div class="board__header">
+        <div class="board__header-title">
+          <span class="board__status-indicator"></span>
+          <h2 class="board__title">Just posted</h2>
+        </div>
+        <span class="board__live-tag">Live Feed</span>
+      </div>
+
+      <% if (latestJobs.length) { %>
+        <ul class="board__list">
+          <% latestJobs.slice(0, 4).forEach((job) => { %>
+            <li class="board__item">
+              <span class="monogram monogram--<%= fmt.tintIndex(job.company_name) %>" aria-hidden="true"><%= fmt.initials(job.company_name) %></span>
+              <div class="board__item-content">
+                <a class="board__job-title" href="/jobs/<%= job.id %>"><%= job.title %></a>
+                <span class="board__company"><%= job.company_name %></span>
+                <span class="board__meta"><%- icon('pin') %> <%= job.location %> &bull; <%= fmt.timeAgo(job.created_at) %></span>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p class="board__empty">No open vacancies right now. Employers can post the first one.</p>
+      <% } %>
+
+      <div class="board__foot">
+        <div class="board__foot-stat">
+          <span class="board__foot-number"><%= openJobCount %></span>
+          <span>open vacancies right now</span>
+        </div>
+        <a class="board__foot-link" href="/jobs">View all &rarr;</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- Trust Metrics Bar -->
+<section class="trust-bar">
+  <div class="container trust-bar__inner">
+    <div class="trust-item">
+      <div class="trust-item__icon"><%- icon('shield') %></div>
+      <div>
+        <strong>100% Verified Employers</strong>
+        <span>Authenticated corporate &amp; institution profiles</span>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-item__icon"><%- icon('file') %></div>
+      <div>
+        <strong>Single-CV Application</strong>
+        <span>Upload your PDF once, apply to any role in one click</span>
+      </div>
+    </div>
+    <div class="trust-item">
+      <div class="trust-item__icon"><%- icon('trend-up') %></div>
+      <div>
+        <strong>Live Status Transparency</strong>
+        <span>Real-time tracking: Pending &rarr; Shortlisted &rarr; Hired</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Latest Vacancies Section -->
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <div>
+        <h2 class="section__title">Latest vacancies</h2>
+        <p class="section__subtitle">Direct openings updated in real time from reputable employers across Pakistan.</p>
+      </div>
+      <a class="btn btn--outline" href="/jobs">
+        <span>Browse all jobs</span>
+        <%- icon('arrow-right') %>
+      </a>
+    </div>
+
+    <% if (latestJobs.length) { %>
+      <div class="job-list">
+        <% latestJobs.forEach((job) => { %><%- include('../partials/job-row', { job }) %><% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty">
+        <h3 class="empty__title">No open vacancies right now</h3>
+        <p>Check back soon, or create an employer account to post the first opportunity.</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<!-- Product Performs Bento: How It Works -->
+<section class="section section--tint">
+  <div class="container">
+    <div class="section__head section__head--center">
+      <div class="text-center">
+        <span class="eyebrow-pill">Designed For Pakistan</span>
+        <h2 class="section__title">How AcquireJobs.pk works</h2>
+        <p class="section__subtitle">A clear, modern hiring lifecycle built to eliminate job board spam and uncertainty.</p>
+      </div>
+    </div>
+
+    <div class="bento-grid">
+      <div class="bento-card bento-card--accent">
+        <div class="bento-card__badge">Step 1</div>
+        <div class="bento-card__icon-box"><%- icon('user') %></div>
+        <h3 class="bento-card__title">Set up your profile</h3>
+        <p class="bento-card__text">Add your education, experience and skills, then upload your CV as a PDF. You only need one.</p>
+        <div class="bento-card__preview">
+          <div class="mini-profile-card">
+            <div class="mini-avatar">AK</div>
+            <div class="mini-info">
+              <span class="mini-name">Ayesha Khan</span>
+              <span class="mini-role">FAST-NUCES Lahore &bull; Software Engineer</span>
+            </div>
+            <span class="mini-badge"><%- icon('check') %> CV Uploaded</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-card__badge">Step 2</div>
+        <div class="bento-card__icon-box"><%- icon('search') %></div>
+        <h3 class="bento-card__title">Apply in a click</h3>
+        <p class="bento-card__text">Search by keyword, city or job type. Add a short message if you like, and your CV goes along.</p>
+        <div class="bento-card__preview">
+          <div class="mini-search-tags">
+            <span class="mini-tag mini-tag--active">Node.js</span>
+            <span class="mini-tag">React</span>
+            <span class="mini-tag">Lahore</span>
+            <span class="mini-tag">Full-Time</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bento-card">
+        <div class="bento-card__badge">Step 3</div>
+        <div class="bento-card__icon-box"><%- icon('trend-up') %></div>
+        <h3 class="bento-card__title">Track every application</h3>
+        <p class="bento-card__text">Employers mark each application Pending, Shortlisted, Rejected or Hired. You see the change straight away.</p>
+        <div class="bento-card__preview">
+          <div class="mini-pipeline">
+            <div class="pipeline-step pipeline-step--done">
+              <span class="pipeline-dot"></span>
+              <span>Pending</span>
+            </div>
+            <div class="pipeline-line"></div>
+            <div class="pipeline-step pipeline-step--active">
+              <span class="pipeline-dot"></span>
+              <span>Shortlisted</span>
+            </div>
+            <div class="pipeline-line"></div>
+            <div class="pipeline-step">
+              <span class="pipeline-dot"></span>
+              <span>Hired</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Executive CTA Section -->
+<section class="cta-banner">
+  <div class="container">
+    <div class="cta-banner__card">
+      <div class="cta-banner__content">
+        <span class="cta-banner__tag">Employer Portal</span>
+        <h2 class="cta-banner__title">Hiring in Pakistan?</h2>
+        <p class="cta-banner__desc">Create a company profile, publish a vacancy and review applicants in one place.</p>
+        <div class="cta-banner__actions">
+          <a class="btn btn--accent btn--lg" href="/register?role=employer">
+            <span>Post a vacancy</span>
+            <%- icon('arrow-right') %>
+          </a>
+          <a class="btn btn--outline-light btn--lg" href="/login">
+            <span>Employer log in</span>
+          </a>
+        </div>
+      </div>
+      <div class="cta-banner__visual" aria-hidden="true">
+        <div class="visual-applicant-tile">
+          <div class="visual-header">
+            <span class="visual-badge">New Applicant</span>
+            <span class="visual-time">Just now</span>
+          </div>
+          <div class="visual-applicant-row">
+            <div class="avatar">ZA</div>
+            <div>
+              <strong>Zain Abbas</strong>
+              <small>BS CS, UET Lahore</small>
+            </div>
+          </div>
+          <div class="visual-footer">
+            <span class="badge badge--shortlisted">Shortlisted</span>
+            <span class="visual-pdf"><%- icon('file') %> CV.pdf</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

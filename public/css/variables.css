@@ -1,0 +1,134 @@
+/* ==========================================================================
+   AcquireJobs.pk — Master Design System Tokens
+   Engineered using UI/UX Pro Max, High-End Visual Design & 21st Design System
+   ========================================================================== */
+
+:root {
+  /* ---------- Typography Stacks ---------- */
+  --font-display: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* Type Scale */
+  --text-2xs: 0.6875rem; /* 11px */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-md: 1.0625rem;  /* 17px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  --text-5xl: 3rem;      /* 48px */
+  --text-6xl: 3.75rem;   /* 60px */
+
+  /* ---------- Neutral Surfaces & Inks ---------- */
+  --paper: #f8fafc;                /* Canvas ground: clean crisp slate-50 */
+  --surface: #ffffff;              /* Card & panel surface */
+  --surface-raised: #ffffff;       /* Popovers, modals, elevated islands */
+  --surface-subtle: #f1f5f9;       /* Inset containers, table stripes */
+  --surface-active: #e2e8f0;       /* Pressed or active states */
+
+  --ink: #0f172a;                  /* Primary headings & dark accents (Slate 900) */
+  --ink-heading: #0f172a;
+  --ink-body: #334155;             /* Body copy (Slate 700 - AAA contrast) */
+  --ink-soft: #475569;             /* Secondary descriptions (Slate 600) */
+  --ink-muted: #64748b;            /* Subtext, metadata, timestamps (Slate 500) */
+  --ink-subtle: #94a3b8;           /* Placeholders, disabled states (Slate 400) */
+
+  /* Hairlines & Structural Borders */
+  --line: #e2e8f0;                 /* System division line */
+  --line-subtle: rgba(226, 232, 240, 0.7);
+  --line-strong: #cbd5e1;          /* Interactive input border */
+  --line-focus: #0284c7;
+
+  /* ---------- Brand Chromas & Accents ---------- */
+  /* Primary: Ocean Sapphire (institutional trust, corporate authority) */
+  --brand-primary: #0284c7;
+  --brand-primary-hover: #0369a1;
+  --brand-primary-dark: #075985;
+  --brand-primary-tint: #f0f9ff;
+  --brand-primary-glow: rgba(2, 132, 199, 0.2);
+
+  /* Legacy mappings so existing utility classes work effortlessly */
+  --pine: #0284c7;
+  --pine-dark: #0369a1;
+  --pine-tint: #f0f9ff;
+
+  /* National Accent: Pakistan Emerald (career verification, success, hired status) */
+  --emerald: #059669;
+  --emerald-hover: #047857;
+  --emerald-tint: #ecfdf5;
+  --emerald-border: #a7f3d0;
+  --emerald-glow: rgba(5, 150, 105, 0.18);
+
+  /* Warm Accent: Amber Gold (pending, notifications, highlights) */
+  --marigold: #f59e0b;
+  --marigold-hover: #d97706;
+  --marigold-tint: #fef3c7;
+  --marigold-border: #fde68a;
+
+  /* Danger / Destructive: Crimson Rose (rejected, deactivate, errors) */
+  --brick: #e11d48;
+  --brick-hover: #be123c;
+  --brick-tint: #ffe4e6;
+  --brick-border: #fecdd3;
+
+  /* Informational: Electric Indigo (shortlisted, talent alerts) */
+  --teal: #4f46e5;
+  --teal-hover: #4338ca;
+  --teal-tint: #eef2ff;
+  --teal-border: #c7d2fe;
+
+  /* ---------- Spatial Scale (4px / 8px Grid) ---------- */
+  --space-05: 0.125rem; /* 2px */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-25: 0.625rem; /* 10px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-7: 2rem;      /* 32px */
+  --space-8: 2.5rem;    /* 40px */
+  --space-9: 3rem;      /* 48px */
+  --space-10: 4rem;     /* 64px */
+  --space-12: 5rem;     /* 80px */
+  --space-16: 6rem;     /* 96px */
+
+  --container: 1200px;
+  --container-narrow: 840px;
+
+  /* ---------- Nested Double-Bezel Geometry ---------- */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-pill: 9999px;
+
+  --radius-outer: 18px;
+  --radius-inner: calc(18px - 4px); /* 14px concentric inner */
+
+  /* ---------- Multi-Layer Diffused Shadows ---------- */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 8px -2px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 20px -4px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  --shadow-xl: 0 20px 28px -6px rgba(15, 23, 42, 0.1), 0 8px 10px -4px rgba(15, 23, 42, 0.04);
+  --shadow-pop: 0 20px 36px -8px rgba(15, 23, 42, 0.16), 0 1px 1px 0 rgba(255, 255, 255, 0.5) inset;
+
+  /* Specular Highlight for machined card look */
+  --specular-inner: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  /* ---------- Fluid Motion & Spring Dynamics ---------- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --duration-fast: 150ms;
+  --duration-normal: 240ms;
+  --duration-slow: 400ms;
+}
