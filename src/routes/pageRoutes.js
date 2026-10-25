@@ -4,7 +4,9 @@ const page = require('../controllers/pageController');
 
 const router = express.Router();
 
-// Public homepage
+// Public
 router.get('/', page.home);
+router.get('/login', page.login);
+router.get('/register', page.register);
 
 module.exports = router;

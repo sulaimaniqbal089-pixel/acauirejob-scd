@@ -1,0 +1,26 @@
+<%
+  // One form field (label + input/select/textarea + error slot).
+  // Usage: include('../partials/field', { field: { name, label, type, value, required, options, rows, hint, placeholder, autocomplete } })
+  const f = Object.assign({
+    type: 'text', value: '', required: false, rows: 4, options: null,
+    hint: '', placeholder: '', autocomplete: 'off', maxlength: '', min: '',
+  }, field);
+  const id = 'f-' + f.name;
+%>
+<div class="field">
+  <label class="field__label" for="<%= id %>"><%= f.label %><% if (!f.required) { %> <span class="field__optional">optional</span><% } %></label>
+  <% if (f.options) { %>
+    <select class="input" id="<%= id %>" name="<%= f.name %>" <%= f.required ? 'required' : '' %>>
+      <option value=""><%= f.placeholder || 'Select an option' %></option>
+      <% f.options.forEach((option) => { %>
+        <option value="<%= option %>" <%= String(f.value) === String(option) ? 'selected' : '' %>><%= option %></option>
+      <% }) %>
+    </select>
+  <% } else if (f.type === 'textarea') { %>
+    <textarea class="input" id="<%= id %>" name="<%= f.name %>" rows="<%= f.rows %>" maxlength="<%= f.maxlength %>" placeholder="<%= f.placeholder %>" <%= f.required ? 'required' : '' %>><%= f.value %></textarea>
+  <% } else { %>
+    <input class="input" id="<%= id %>" name="<%= f.name %>" type="<%= f.type %>" value="<%= f.value %>" placeholder="<%= f.placeholder %>" autocomplete="<%= f.autocomplete %>" <%- f.maxlength ? 'maxlength="' + f.maxlength + '"' : '' %> <%- f.min !== '' ? 'min="' + f.min + '"' : '' %> <%= f.required ? 'required' : '' %>>
+  <% } %>
+  <% if (f.hint) { %><p class="field__hint"><%= f.hint %></p><% } %>
+  <p class="field__error" data-error-for="<%= f.name %>" role="alert"></p>
+</div>

@@ -1,0 +1,65 @@
+<%- include('../partials/header') %>
+<section class="auth">
+  <aside class="auth__aside">
+    <div class="auth__aside-content">
+      <div class="auth__aside-tag"><%- icon('shield') %> National Talent Platform</div>
+      <h2 class="auth__aside-title">One account. One clear path.</h2>
+      <p>Job seekers apply with a single CV and follow each application. Employers post vacancies and manage applicants without spreadsheets.</p>
+
+      <div class="auth__aside-perks">
+        <div class="perk-item">
+          <%- icon('check') %>
+          <span>One-click applications with uploaded PDF CV</span>
+        </div>
+        <div class="perk-item">
+          <%- icon('check') %>
+          <span>Post job vacancies across Pakistan in minutes</span>
+        </div>
+        <div class="perk-item">
+          <%- icon('check') %>
+          <span>Instant status notifications &amp; transparent hiring</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="auth__panel">
+    <div class="auth__box">
+      <div class="auth__box-header">
+        <h1 class="auth__title">Create your account</h1>
+        <p class="auth__lead">Already registered? <a href="/login">Log in</a></p>
+      </div>
+
+      <form data-api="/api/auth/register" data-method="POST" data-role-form novalidate>
+        <fieldset class="role-picker">
+          <legend class="field__label">I want to</legend>
+          <label class="role-picker__option">
+            <input type="radio" name="role" value="job_seeker" <%= role === 'job_seeker' ? 'checked' : '' %>>
+            <span><strong>Find a job</strong><small>Job seeker account</small></span>
+          </label>
+          <label class="role-picker__option">
+            <input type="radio" name="role" value="employer" <%= role === 'employer' ? 'checked' : '' %>>
+            <span><strong>Hire people</strong><small>Employer account</small></span>
+          </label>
+        </fieldset>
+
+        <%- include('../partials/field', { field: { name: 'fullName', label: 'Full name', required: true, autocomplete: 'name', maxlength: 100 } }) %>
+
+        <div data-show-for="employer" <%- role === 'employer' ? '' : 'hidden' %>>
+          <%- include('../partials/field', { field: { name: 'companyName', label: 'Company name', required: true, maxlength: 150 } }) %>
+        </div>
+
+        <%- include('../partials/field', { field: { name: 'email', label: 'Email', type: 'email', required: true, autocomplete: 'email' } }) %>
+        <%- include('../partials/field', { field: { name: 'password', label: 'Password', type: 'password', required: true, autocomplete: 'new-password', hint: 'At least 8 characters, with a letter and a number.' } }) %>
+        <%- include('../partials/field', { field: { name: 'confirmPassword', label: 'Confirm password', type: 'password', required: true, autocomplete: 'new-password' } }) %>
+
+        <p class="form-error" data-form-error role="alert"></p>
+        <button class="btn btn--primary btn--block btn--lg" type="submit">
+          <span>Create account</span>
+          <%- icon('arrow-right') %>
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+<%- include('../partials/footer') %>

@@ -45,6 +45,9 @@ app.use(csrfProtection);
 app.use(loadUser);
 app.use(viewLocals);
 
+// REST API
+app.use('/api/auth', require('./routes/authRoutes'));
+
 // HTML pages
 app.use('/', require('./routes/pageRoutes'));
 

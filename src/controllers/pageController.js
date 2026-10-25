@@ -1,5 +1,6 @@
-// Milestone 1 Page Controller: renders the public homepage.
-// Job listings and candidate dashboards are part of upcoming milestones.
+// Milestone 1 Page Controller: renders public homepage and authentication views.
+const { safeNextPath, dashboardPathFor } = require('../utils/paths');
+const { ROLES } = require('../utils/constants');
 
 const home = (req, res) => {
   res.render('public/home', {
@@ -10,4 +11,15 @@ const home = (req, res) => {
   });
 };
 
-module.exports = { home };
+const login = (req, res) => {
+  if (req.user) return res.redirect(dashboardPathFor(req.user.role));
+  return res.render('auth/login', { title: 'Log in', next: safeNextPath(req.query.next) || '' });
+};
+
+const register = (req, res) => {
+  if (req.user) return res.redirect(dashboardPathFor(req.user.role));
+  const role = req.query.role === ROLES.EMPLOYER ? ROLES.EMPLOYER : ROLES.JOB_SEEKER;
+  return res.render('auth/register', { title: 'Create your account', role });
+};
+
+module.exports = { home, login, register };
