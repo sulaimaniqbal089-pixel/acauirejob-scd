@@ -1,0 +1,108 @@
+<%- include('../partials/header') %>
+
+<section class="page-banner">
+  <div class="container">
+    <div class="page-banner__content">
+      <div class="page-banner__eyebrow">
+        <span class="hero__pulse-dot"></span>
+        <span>Explore Vacancies</span>
+      </div>
+      <h1 class="page-banner__title">Browse jobs</h1>
+      <p class="page-banner__lead">Newest vacancies first. Narrow them down by keyword, city or job type.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--compact">
+  <div class="container">
+    <!-- Search & Filter Console -->
+    <div class="filter-card">
+      <form class="filter-bar" action="/jobs" method="get" role="search">
+        <div class="field filter-field--keyword">
+          <label class="field__label" for="keyword">Keyword</label>
+          <div class="input-with-icon">
+            <%- icon('search') %>
+            <input class="input" id="keyword" type="search" name="keyword" value="<%= filters.keyword %>" placeholder="Job title, skill, or company" maxlength="100">
+          </div>
+        </div>
+
+        <div class="field filter-field--city">
+          <label class="field__label" for="city">City</label>
+          <div class="input-with-icon">
+            <%- icon('pin') %>
+            <select class="input" id="city" name="city">
+              <option value="">All cities</option>
+              <% c.CITIES.forEach((city) => { %><option value="<%= city %>" <%= filters.city === city ? 'selected' : '' %>><%= city %></option><% }) %>
+            </select>
+          </div>
+        </div>
+
+        <div class="field filter-field--type">
+          <label class="field__label" for="type">Job type</label>
+          <div class="input-with-icon">
+            <%- icon('briefcase') %>
+            <select class="input" id="type" name="type">
+              <option value="">All types</option>
+              <% c.JOB_TYPES.forEach((type) => { %><option value="<%= type %>" <%= filters.type === type ? 'selected' : '' %>><%= type %></option><% }) %>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-bar__actions">
+          <button class="btn btn--primary" type="submit">
+            <span>Search</span>
+            <%- icon('search') %>
+          </button>
+          <% if (filters.keyword || filters.city || filters.type) { %>
+            <a class="btn btn--ghost" href="/jobs">Clear filters</a>
+          <% } else { %>
+            <a class="btn btn--ghost" href="/jobs">Reset</a>
+          <% } %>
+        </div>
+      </form>
+
+      <!-- Quick Suggestion Tags -->
+      <div class="filter-quick-tags">
+        <span class="quick-tags__label">Popular hubs:</span>
+        <% c.CITIES.slice(0, 5).forEach((city) => { %>
+          <a class="quick-chip <%= filters.city === city ? 'is-active' : '' %>" href="/jobs?city=<%= encodeURIComponent(city) %>&type=<%= encodeURIComponent(filters.type || '') %>&keyword=<%= encodeURIComponent(filters.keyword || '') %>">
+            <%= city %>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+
+    <!-- Results Header -->
+    <div class="results-header">
+      <p class="results-count">
+        <strong><%= pagination.total %></strong> <%= pagination.total === 1 ? 'vacancy' : 'vacancies' %> found
+        <% if (filters.keyword || filters.city || filters.type) { %>
+          <span class="results-filtered-note">(filtered)</span>
+        <% } %>
+      </p>
+    </div>
+
+    <% if (jobs.length) { %>
+      <div class="job-list">
+        <% jobs.forEach((job) => { %><%- include('../partials/job-row', { job }) %><% }) %>
+      </div>
+      <div class="pagination-wrap">
+        <%- include('../partials/pagination', { pagination, baseUrl: '/jobs', query: { keyword: filters.keyword, city: filters.city, type: filters.type } }) %>
+      </div>
+    <% } else { %>
+      <div class="empty">
+        <div class="empty__icon-wrap">
+          <%- icon('search') %>
+        </div>
+        <h3 class="empty__title">No jobs match those filters</h3>
+        <p>Try a shorter keyword, or search all cities and job types across Pakistan.</p>
+        <a class="btn btn--primary" href="/jobs">
+          <span>Clear filters</span>
+          <%- icon('arrow-right') %>
+        </a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

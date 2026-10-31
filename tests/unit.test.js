@@ -3,6 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const { validate, isStrongPassword } = require('../src/utils/validate');
+const { paginate } = require('../src/utils/pagination');
 const format = require('../src/utils/format');
 const { isJobOpen } = require('../src/utils/jobRules');
 const { dashboardPathFor, safeNextPath } = require('../src/utils/paths');
@@ -56,6 +57,15 @@ test('validate enforces max length and patterns', () => {
   assert.equal(validate({ phone: '0300 1234567' }, schema).isValid, true);
   assert.equal(validate({ phone: 'abc' }, schema).errors.phone, 'bad phone');
   assert.match(validate({ bio: 'too long' }, schema).errors.bio, /5 characters/);
+});
+
+test('paginate clamps pages and computes offsets', () => {
+  assert.deepEqual(paginate({ page: '2', perPage: 8, total: 30 }), {
+    page: 2, perPage: 8, total: 30, totalPages: 4, offset: 8, hasPrev: true, hasNext: true,
+  });
+  assert.equal(paginate({ page: '99', perPage: 8, total: 30 }).page, 4);
+  assert.equal(paginate({ page: 'abc', perPage: 8, total: 30 }).page, 1);
+  assert.equal(paginate({ page: 1, perPage: 8, total: 0 }).totalPages, 1);
 });
 
 test('format helpers', () => {

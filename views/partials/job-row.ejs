@@ -1,0 +1,48 @@
+<%# One job in a list. Redesigned with Double-Bezel nested architecture %>
+<% const salary = fmt.formatSalary(job.salary_min, job.salary_max); %>
+<article class="job-card">
+  <div class="job-card__inner">
+    <div class="job-card__badge-col">
+      <span class="monogram monogram--<%= fmt.tintIndex(job.company_name) %>" aria-hidden="true"><%= fmt.initials(job.company_name) %></span>
+    </div>
+
+    <div class="job-card__main">
+      <div class="job-card__title-row">
+        <h3 class="job-card__title">
+          <a href="/jobs/<%= job.id %>"><%= job.title %></a>
+        </h3>
+        <% if (job.employment_type === 'Full-Time') { %>
+          <span class="tag tag--primary">Full-Time</span>
+        <% } else if (job.employment_type === 'Internship') { %>
+          <span class="tag tag--accent">Internship</span>
+        <% } else { %>
+          <span class="tag tag--neutral"><%= job.employment_type %></span>
+        <% } %>
+      </div>
+
+      <p class="job-card__company">
+        <span class="job-card__company-name"><%= job.company_name %></span>
+        <span class="job-card__verified" title="Verified employer"><%- icon('check') %></span>
+      </p>
+
+      <ul class="meta-list">
+        <li><%- icon('pin') %><span><%= job.location %></span></li>
+        <li><%- icon('briefcase') %><span><%= job.employment_type %></span></li>
+        <% if (salary) { %>
+          <li class="meta-list__salary"><%- icon('trend-up') %><span><%= salary %></span></li>
+        <% } %>
+        <% if (job.deadline) { %>
+          <li class="meta-list__deadline"><%- icon('clock') %><span>Deadline: <%= fmt.formatDate(job.deadline) %></span></li>
+        <% } %>
+      </ul>
+    </div>
+
+    <div class="job-card__side">
+      <span class="job-card__time"><%- icon('clock') %><%= fmt.timeAgo(job.created_at) %></span>
+      <a class="btn btn--outline btn--sm job-card__cta" href="/jobs/<%= job.id %>">
+        <span>View details</span>
+        <%- icon('arrow-right') %>
+      </a>
+    </div>
+  </div>
+</article>
