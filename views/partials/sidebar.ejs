@@ -1,0 +1,53 @@
+<%
+  // Menu items for each role. "key" matches the "section" value each page passes to its template.
+  const menus = {
+    job_seeker: [
+      { key: 'dashboard', label: 'Dashboard', href: '/seeker/dashboard', icon: 'grid' },
+      { key: 'applications', label: 'My applications', href: '/seeker/applications', icon: 'file' },
+      { key: 'profile', label: 'My profile', href: '/seeker/profile', icon: 'user' },
+      { key: 'cv', label: 'My CV', href: '/seeker/cv', icon: 'download' },
+      { key: 'browse', label: 'Browse jobs', href: '/jobs', icon: 'search' },
+    ],
+    employer: [
+      { key: 'dashboard', label: 'Dashboard', href: '/employer/dashboard', icon: 'grid' },
+      { key: 'jobs', label: 'Manage jobs', href: '/employer/jobs', icon: 'briefcase' },
+      { key: 'applications', label: 'Applicants', href: '/employer/applications', icon: 'users' },
+      { key: 'company', label: 'Company profile', href: '/employer/company', icon: 'building' },
+    ],
+    admin: [
+      { key: 'dashboard', label: 'Dashboard', href: '/admin/dashboard', icon: 'grid' },
+      { key: 'users', label: 'Users', href: '/admin/users', icon: 'users' },
+      { key: 'jobs', label: 'Jobs', href: '/admin/jobs', icon: 'briefcase' },
+    ],
+  };
+  const items = menus[user.role].concat([{ key: 'settings', label: 'Account settings', href: '/account/settings', icon: 'settings' }]);
+  const activeSection = locals.section || '';
+%>
+<aside class="sidebar" aria-label="<%= c.ROLE_LABELS[user.role] %> menu">
+  <div class="sidebar__profile-badge">
+    <span class="avatar avatar--sidebar"><%= fmt.initials(user.full_name) %></span>
+    <div class="sidebar__user-details">
+      <strong class="sidebar__user-name"><%= user.full_name %></strong>
+      <p class="sidebar__role"><%= c.ROLE_LABELS[user.role] %></p>
+    </div>
+  </div>
+
+  <nav class="sidebar__nav">
+    <% items.forEach((item) => { %>
+      <a class="sidebar__link <%= item.key === activeSection ? 'is-active' : '' %>" href="<%= item.href %>" <%- item.key === activeSection ? 'aria-current="page"' : '' %>>
+        <span class="sidebar__icon-wrap"><%- icon(item.icon) %></span>
+        <span class="sidebar__link-label"><%= item.label %></span>
+        <% if (item.key === activeSection) { %>
+          <span class="sidebar__active-pill" aria-hidden="true"></span>
+        <% } %>
+      </a>
+    <% }) %>
+  </nav>
+
+  <div class="sidebar__bottom-action">
+    <button class="sidebar__logout-btn" type="button" data-action data-api="/api/auth/logout" data-method="POST">
+      <%- icon('x') %>
+      <span>Sign out</span>
+    </button>
+  </div>
+</aside>

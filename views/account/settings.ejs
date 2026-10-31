@@ -1,0 +1,42 @@
+<%- include('../partials/dash-open', { heading: 'Account settings', lead: 'Your sign-in details, profile security and password.' }) %>
+
+<div class="panel-grid">
+  <section class="panel">
+    <div class="panel__head">
+      <h2 class="panel__title">Your account</h2>
+      <span class="badge badge--active">Active</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-5); padding-bottom: var(--space-4); border-bottom: 1px solid var(--line);">
+      <span class="monogram monogram--lg monogram--0" aria-hidden="true"><%= fmt.initials(user.full_name) %></span>
+      <div>
+        <h3 style="font-size: var(--text-base); font-weight: 700; margin: 0 0 2px;"><%= user.full_name %></h3>
+        <p class="muted" style="margin: 0; font-size: var(--text-xs);"><%= user.email %></p>
+      </div>
+    </div>
+    <dl class="details">
+      <div><dt>Name</dt><dd><%= user.full_name %></dd></div>
+      <div><dt>Email</dt><dd><%= user.email %></dd></div>
+      <div><dt>Account type</dt><dd><%= c.ROLE_LABELS[user.role] %></dd></div>
+      <div><dt>Member since</dt><dd><%= fmt.formatDate(user.created_at) %></dd></div>
+    </dl>
+  </section>
+
+  <section class="panel">
+    <div class="panel__head">
+      <h2 class="panel__title">Change password</h2>
+      <span style="font-size: var(--text-xs); color: var(--ink-muted); display: inline-flex; align-items: center; gap: 4px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Encrypted
+      </span>
+    </div>
+    <form data-api="/api/auth/change-password" data-method="POST" data-reset novalidate>
+      <%- include('../partials/field', { field: { name: 'currentPassword', label: 'Current password', type: 'password', required: true, autocomplete: 'current-password' } }) %>
+      <%- include('../partials/field', { field: { name: 'newPassword', label: 'New password', type: 'password', required: true, autocomplete: 'new-password', hint: 'At least 8 characters, with a letter and a number.' } }) %>
+      <%- include('../partials/field', { field: { name: 'confirmPassword', label: 'Confirm new password', type: 'password', required: true, autocomplete: 'new-password' } }) %>
+      <div style="margin-top: var(--space-5);">
+        <button class="btn btn--primary" type="submit">Update password</button>
+      </div>
+    </form>
+  </section>
+</div>
+
+<%- include('../partials/dash-close') %>

@@ -1,0 +1,41 @@
+<%- include('../partials/dash-open', { heading: 'My CV', lead: 'One active CV is attached to every application you send.' }) %>
+
+<div class="panel-grid">
+  <section class="panel">
+    <h2 class="panel__title">Current CV</h2>
+    <% if (profile.cv_filename) { %>
+      <div class="file-card">
+        <span class="file-card__icon"><%- icon('file') %></span>
+        <div>
+          <p class="file-card__name"><%= profile.cv_original_name %></p>
+          <p class="muted">Uploaded <%= fmt.formatDate(profile.cv_uploaded_at) %></p>
+        </div>
+      </div>
+      <div class="button-row">
+        <a class="btn btn--outline" href="/api/profile/cv"><%- icon('download') %>Download</a>
+        <button class="btn btn--danger-outline" type="button" data-action data-api="/api/profile/cv" data-method="DELETE"
+                data-confirm="Delete your CV? You will need to upload a new one before you can apply again.">Delete CV</button>
+      </div>
+    <% } else { %>
+      <div class="empty empty--inline">
+        <h3 class="empty__title">No CV uploaded</h3>
+        <p>Upload a PDF to start applying for jobs.</p>
+      </div>
+    <% } %>
+  </section>
+
+  <section class="panel">
+    <h2 class="panel__title"><%= profile.cv_filename ? 'Replace your CV' : 'Upload your CV' %></h2>
+    <form data-api="/api/profile/cv" data-method="POST" enctype="multipart/form-data" novalidate>
+      <div class="field">
+        <label class="field__label" for="f-cv">PDF file</label>
+        <input class="input input--file" id="f-cv" name="cv" type="file" accept="application/pdf,.pdf" required>
+        <p class="field__hint">PDF only, up to 2 MB.</p>
+        <p class="field__error" data-error-for="cv" role="alert"></p>
+      </div>
+      <button class="btn btn--primary" type="submit"><%= profile.cv_filename ? 'Replace CV' : 'Upload CV' %></button>
+    </form>
+  </section>
+</div>
+
+<%- include('../partials/dash-close') %>

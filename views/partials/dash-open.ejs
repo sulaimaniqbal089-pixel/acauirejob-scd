@@ -1,0 +1,11 @@
+<%- include('header') %>
+<div class="container dash">
+  <%- include('sidebar') %>
+  <div class="dash__main">
+    <div class="page-head">
+      <div>
+        <h1 class="page-head__title"><%= heading %></h1>
+        <% if (locals.lead) { %><p class="page-head__lead"><%= lead %></p><% } %>
+      </div>
+      <% if (locals.headActions) { %><div class="page-head__actions"><%- headActions %></div><% } %>
+    </div>

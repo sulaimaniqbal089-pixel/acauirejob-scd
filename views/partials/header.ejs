@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/public.css">
   <link rel="stylesheet" href="/css/auth.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
   <link rel="stylesheet" href="/css/responsive.css">
 </head>
 <body>
@@ -41,6 +42,7 @@
           <a class="btn btn--primary" href="/register">Sign up</a>
         </div>
       <% } else { %>
+        <a class="site-nav__link" href="/dashboard">Dashboard</a>
         <div class="user-menu" data-dropdown>
           <button class="user-menu__button" type="button" aria-haspopup="menu" aria-expanded="false" data-dropdown-toggle>
             <span class="avatar" aria-hidden="true"><%= fmt.initials(user.full_name) %></span>
@@ -49,6 +51,7 @@
           </button>
           <div class="user-menu__panel" role="menu">
             <p class="user-menu__meta"><strong><%= c.ROLE_LABELS[user.role] %></strong><br><%= user.email %></p>
+            <a role="menuitem" href="/account/settings">Account settings</a>
             <button role="menuitem" type="button" data-action data-api="/api/auth/logout" data-method="POST">Log out</button>
           </div>
         </div>

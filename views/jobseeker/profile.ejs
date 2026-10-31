@@ -1,0 +1,25 @@
+<%- include('../partials/dash-open', { heading: 'My profile', lead: 'Employers see these details when you apply.' }) %>
+
+<section class="panel panel--form">
+  <form data-api="/api/profile" data-method="PUT" novalidate>
+    <div class="form-grid">
+      <%- include('../partials/field', { field: { name: 'fullName', label: 'Full name', required: true, value: profile.full_name, maxlength: 100 } }) %>
+      <div class="field">
+        <label class="field__label" for="f-email-readonly">Email</label>
+        <input class="input" id="f-email-readonly" type="email" value="<%= profile.email %>" disabled>
+        <p class="field__hint">Your email is your login and cannot be changed here.</p>
+      </div>
+      <%- include('../partials/field', { field: { name: 'phone', label: 'Phone number', type: 'tel', value: profile.phone, placeholder: '0300 1234567', autocomplete: 'tel' } }) %>
+      <%- include('../partials/field', { field: { name: 'city', label: 'City', options: c.CITIES, value: profile.city } }) %>
+    </div>
+    <%- include('../partials/field', { field: { name: 'education', label: 'Education', value: profile.education, placeholder: 'BS Software Engineering, FAST-NUCES (2027)', maxlength: 255 } }) %>
+    <%- include('../partials/field', { field: { name: 'experience', label: 'Experience', type: 'textarea', rows: 3, value: profile.experience, placeholder: 'Intern at a software house, 6 months. Freelance web projects.', maxlength: 500 } }) %>
+    <%- include('../partials/field', { field: { name: 'skills', label: 'Skills', value: profile.skills, placeholder: 'JavaScript, Node.js, SQL, Communication', hint: 'Separate skills with commas.', maxlength: 500 } }) %>
+    <%- include('../partials/field', { field: { name: 'summary', label: 'Professional summary', type: 'textarea', rows: 5, value: profile.summary, placeholder: 'Two or three sentences about you and the work you want.', maxlength: 2000 } }) %>
+    <div class="button-row">
+      <button class="btn btn--primary" type="submit">Save profile</button>
+    </div>
+  </form>
+</section>
+
+<%- include('../partials/dash-close') %>

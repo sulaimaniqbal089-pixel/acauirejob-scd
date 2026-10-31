@@ -55,4 +55,16 @@ const register = (req, res) => {
   return res.render('auth/register', { title: 'Create your account', role });
 };
 
-module.exports = { home, browseJobs, jobDetails, login, register };
+const accountSettings = (req, res) => res.render('account/settings', { title: 'Account settings', section: 'settings' });
+
+const seekerProfile = asyncHandler(async (req, res) => {
+  const profile = await profileModel.getByUserId(req.user.id);
+  res.render('jobseeker/profile', { title: 'My profile', section: 'profile', profile });
+});
+
+const seekerCv = asyncHandler(async (req, res) => {
+  const profile = await profileModel.getByUserId(req.user.id);
+  res.render('jobseeker/cv', { title: 'My CV', section: 'cv', profile });
+});
+
+module.exports = { home, browseJobs, jobDetails, login, register, seekerProfile, seekerCv, accountSettings };
