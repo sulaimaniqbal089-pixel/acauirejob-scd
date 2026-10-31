@@ -1,0 +1,171 @@
+<%- include('../partials/header') %>
+<% const salary = fmt.formatSalary(job.salary_min, job.salary_max); %>
+
+<section class="section section--compact">
+  <div class="container">
+    <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+      <a class="back-link" href="/jobs">
+        <%- icon('chevron') %>
+        <span>All jobs</span>
+      </a>
+      <span class="breadcrumb-separator">/</span>
+      <span class="breadcrumb-current"><%= job.title %></span>
+    </nav>
+
+    <div class="job-detail">
+      <article class="job-detail__main">
+        <header class="job-detail__head">
+          <span class="monogram monogram--lg monogram--<%= fmt.tintIndex(job.company_name) %>" aria-hidden="true"><%= fmt.initials(job.company_name) %></span>
+          <div class="job-detail__title-block">
+            <h1 class="job-detail__title"><%= job.title %></h1>
+            <p class="job-detail__company">
+              <span><%= job.company_name %></span>
+              <span class="verified-pill"><%- icon('check') %> Verified Employer</span>
+            </p>
+            <ul class="meta-list">
+              <li><%- icon('pin') %><span><%= job.location %></span></li>
+              <li><%- icon('briefcase') %><span><%= job.employment_type %></span></li>
+              <li><%- icon('clock') %><span>Posted <%= fmt.timeAgo(job.created_at) %></span></li>
+            </ul>
+          </div>
+        </header>
+
+        <% if (job.is_hidden) { %>
+          <div class="notice notice--warning">
+            <%- icon('alert') %>
+            <span>This job is hidden from the public by an administrator. Only you and administrators can see this page.</span>
+          </div>
+        <% } else if (!isOpen) { %>
+          <div class="notice notice--neutral">
+            <%- icon('clock') %>
+            <span>This vacancy is closed and is no longer accepting applications.</span>
+          </div>
+        <% } %>
+
+        <div class="job-detail__content-card">
+          <section class="prose-block">
+            <h2 class="prose-block__title">
+              <%- icon('briefcase') %>
+              <span>About the role</span>
+            </h2>
+            <div class="prose"><%= job.description %></div>
+          </section>
+
+          <section class="prose-block">
+            <h2 class="prose-block__title">
+              <%- icon('check') %>
+              <span>Requirements</span>
+            </h2>
+            <div class="prose"><%= job.requirements %></div>
+          </section>
+
+          <section class="prose-block">
+            <h2 class="prose-block__title">
+              <%- icon('building') %>
+              <span>About <%= job.company_name %></span>
+            </h2>
+            <div class="prose"><%= job.company_description || 'This employer has not added a company description yet.' %></div>
+            <% if (job.company_industry || job.company_website) { %>
+              <div class="company-submeta">
+                <% if (job.company_industry) { %>
+                  <span class="meta-badge"><%- icon('building') %> <%= job.company_industry %></span>
+                <% } %>
+                <% if (job.company_website) { %>
+                  <a class="meta-badge meta-badge--link" href="<%= job.company_website %>" rel="noopener noreferrer nofollow" target="_blank">
+                    <%- icon('arrow-up-right') %>
+                    <span><%= job.company_website %></span>
+                  </a>
+                <% } %>
+              </div>
+            <% } %>
+          </section>
+        </div>
+      </article>
+
+      <aside class="job-detail__side">
+        <div class="apply-box">
+          <div class="apply-box__header">
+            <span class="apply-box__status-pill <%= isOpen ? 'apply-box__status-pill--active' : 'apply-box__status-pill--closed' %>">
+              <span class="status-dot"></span>
+              <%= isOpen ? 'Actively Hiring' : 'Applications Closed' %>
+            </span>
+          </div>
+
+          <dl class="facts">
+            <% if (salary) { %>
+              <div class="facts__row facts__row--salary">
+                <dt>Salary per month</dt>
+                <dd><%= salary %></dd>
+              </div>
+            <% } %>
+            <div class="facts__row">
+              <dt>Job type</dt>
+              <dd><%= job.employment_type %></dd>
+            </div>
+            <div class="facts__row">
+              <dt>Experience</dt>
+              <dd><%= job.experience_required %></dd>
+            </div>
+            <div class="facts__row">
+              <dt>Location</dt>
+              <dd><%= job.location %></dd>
+            </div>
+            <% if (job.deadline) { %>
+              <div class="facts__row">
+                <dt>Apply by</dt>
+                <dd><%= fmt.formatDate(job.deadline) %></dd>
+              </div>
+            <% } %>
+          </dl>
+
+          <div class="apply-box__action-zone">
+            <% if (!isOpen) { %>
+              <p class="apply-box__note">Applications are closed for this job.</p>
+              <a class="btn btn--outline btn--block" href="/jobs">
+                <span>Find other jobs</span>
+                <%- icon('arrow-right') %>
+              </a>
+            <% } else if (!user) { %>
+              <a class="btn btn--primary btn--block btn--lg" href="/login?next=<%= encodeURIComponent('/jobs/' + job.id) %>">
+                <span>Log in to apply</span>
+                <span class="btn__icon-pill" aria-hidden="true"><%- icon('arrow-right') %></span>
+              </a>
+              <p class="apply-box__note">New here? <a href="/register">Create a free account</a></p>
+            <% } else if (user.role === 'job_seeker') { %>
+              <% if (existingApplication) { %>
+                <div class="notice notice--success">
+                  <%- icon('check') %>
+                  <span>You have already applied for this job.</span>
+                </div>
+                <a class="btn btn--outline btn--block" href="/seeker/applications/<%= existingApplication.id %>">
+                  <span>View your application</span>
+                  <%- icon('arrow-right') %>
+                </a>
+              <% } else if (!hasCv) { %>
+                <p class="apply-box__note">Upload your CV once and it is attached to every application.</p>
+                <a class="btn btn--primary btn--block btn--lg" href="/seeker/cv">
+                  <span>Upload your CV</span>
+                  <%- icon('download') %>
+                </a>
+              <% } else { %>
+                <form data-api="/api/applications" data-method="POST" novalidate>
+                  <input type="hidden" name="jobId" value="<%= job.id %>">
+                  <%- include('../partials/field', { field: { name: 'coverMessage', label: 'Cover message', type: 'textarea', rows: 4, maxlength: 1000, placeholder: 'Say a little about why you are a good fit.' } }) %>
+                  <button class="btn btn--primary btn--block btn--lg" type="submit">
+                    <span>Send application</span>
+                    <span class="btn__icon-pill" aria-hidden="true"><%- icon('arrow-right') %></span>
+                  </button>
+                  <p class="apply-box__note"><%- icon('check') %> Your uploaded CV will be sent with this application.</p>
+                </form>
+              <% } %>
+            <% } else { %>
+              <p class="apply-box__note">Only job seeker accounts can apply for jobs.</p>
+            <% } %>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
