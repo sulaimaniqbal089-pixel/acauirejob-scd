@@ -1,0 +1,48 @@
+<%
+  const statusMessages = {
+    Pending: 'The employer has not reviewed your application yet.',
+    Shortlisted: 'Good news: the employer has shortlisted you for the next stage.',
+    Rejected: 'The employer has decided not to move forward with this application.',
+    Hired: 'Congratulations! The employer has marked you as hired.',
+  };
+-%>
+<%- include('../partials/dash-open', { heading: application.job_title, lead: application.company_name + ', ' + application.job_location }) %>
+
+<div class="panel-grid">
+  <section class="panel">
+    <div class="panel__head">
+      <h2 class="panel__title">Application status</h2>
+      <%- include('../partials/status-badge', { status: application.status }) %>
+    </div>
+    <div style="background: var(--surface-subtle); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: var(--space-4); margin-bottom: var(--space-5);">
+      <p style="margin: 0; font-weight: 500; font-size: var(--text-sm); color: var(--ink-heading);"><%= statusMessages[application.status] %></p>
+    </div>
+    <dl class="details">
+      <div><dt>Applied on</dt><dd><%= fmt.formatDate(application.created_at) %></dd></div>
+      <div><dt>Last updated</dt><dd><%= fmt.timeAgo(application.updated_at) %></dd></div>
+      <div><dt>Job type</dt><dd><%= application.employment_type %></dd></div>
+    </dl>
+    <div style="margin-top: var(--space-5);">
+      <a class="btn btn--outline btn--sm" href="/jobs/<%= application.job_id %>">View job posting</a>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel__head">
+      <h2 class="panel__title">Your cover message</h2>
+      <span class="muted" style="font-size: var(--text-xs);">Submitted with application</span>
+    </div>
+    <% if (application.cover_message) { %>
+      <div style="background: var(--surface-subtle); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: var(--space-4);">
+        <p class="prose" style="margin: 0;"><%= application.cover_message %></p>
+      </div>
+    <% } else { %>
+      <p class="muted">You did not add a cover message.</p>
+    <% } %>
+  </section>
+</div>
+
+<div style="margin-top: var(--space-6);">
+  <a class="back-link" href="/seeker/applications">Back to my applications</a>
+</div>
+<%- include('../partials/dash-close') %>

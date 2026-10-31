@@ -1,0 +1,38 @@
+<%- include('../partials/dash-open', {
+  heading: 'Welcome, ' + user.full_name.split(' ')[0],
+  lead: 'Here is where your job search stands today.',
+  headActions: '<a class="btn btn--primary" href="/jobs">Browse jobs</a>'
+}) %>
+
+<dl class="stat-row">
+  <div class="stat"><dt>Total applications</dt><dd><%= stats.total %></dd></div>
+  <div class="stat"><dt>Pending</dt><dd><%= stats.pending %></dd></div>
+  <div class="stat"><dt>Shortlisted</dt><dd><%= stats.shortlisted %></dd></div>
+</dl>
+
+<section class="panel panel--strip">
+  <div>
+    <h2 class="panel__title">Your profile</h2>
+    <p class="muted"><%= profile.full_name %>, <%= profile.email %><% if (profile.city) { %>, <%= profile.city %><% } %></p>
+  </div>
+  <div>
+    <div class="progress" role="img" aria-label="Profile <%= completion %> percent complete">
+      <div class="progress__bar" style="width: <%= completion %>%"></div>
+    </div>
+    <p class="progress__label"><%= completion %>% complete<% if (!profile.cv_filename) { %>. Upload a CV to start applying.<% } %></p>
+  </div>
+  <div class="button-row">
+    <a class="btn btn--outline btn--sm" href="/seeker/profile">Edit profile</a>
+    <a class="btn btn--outline btn--sm" href="/seeker/cv"><%= profile.cv_filename ? 'Manage CV' : 'Upload CV' %></a>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel__head">
+    <h2 class="panel__title">Recent applications</h2>
+    <a class="text-link" href="/seeker/applications">See all</a>
+  </div>
+  <%- include('../partials/seeker-applications-table', { applications: recentApplications }) %>
+</section>
+
+<%- include('../partials/dash-close') %>

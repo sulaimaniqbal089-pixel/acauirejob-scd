@@ -1,4 +1,4 @@
-// Page Controller: renders public views (homepage, jobs, authentication).
+// Page Controller: renders HTML views for public and job seeker pages.
 const jobModel = require('../models/jobModel');
 const profileModel = require('../models/profileModel');
 const applicationModel = require('../models/applicationModel');
@@ -6,8 +6,10 @@ const AppError = require('../utils/AppError');
 const asyncHandler = require('../utils/asyncHandler');
 const { dashboardPathFor, safeNextPath } = require('../utils/paths');
 const { readSearchFilters, canSeeJob } = require('./jobController');
+const { getAccessibleApplication } = require('./applicationController');
 const { ROLES, JOBS_PER_PAGE } = require('../utils/constants');
 
+// ---------- Public ----------
 const home = asyncHandler(async (req, res) => {
   const [latestJobs, cities, openJobCount] = await Promise.all([
     jobModel.latestOpen(6),
@@ -55,7 +57,24 @@ const register = (req, res) => {
   return res.render('auth/register', { title: 'Create your account', role });
 };
 
+const dashboardRedirect = (req, res) => res.redirect(dashboardPathFor(req.user.role));
+
 const accountSettings = (req, res) => res.render('account/settings', { title: 'Account settings', section: 'settings' });
+
+// ---------- Job seeker ----------
+const seekerDashboard = asyncHandler(async (req, res) => {
+  const [profile, stats, recentApplications] = await Promise.all([
+    profileModel.getByUserId(req.user.id),
+    applicationModel.seekerStats(req.user.id),
+    applicationModel.listBySeeker(req.user.id, 5),
+  ]);
+
+  // Profile completeness: how many of these fields are filled in.
+  const checklist = [profile.phone, profile.city, profile.education, profile.experience, profile.skills, profile.summary, profile.cv_filename];
+  const completion = Math.round((checklist.filter(Boolean).length / checklist.length) * 100);
+
+  res.render('jobseeker/dashboard', { title: 'Dashboard', section: 'dashboard', profile, stats, recentApplications, completion });
+});
 
 const seekerProfile = asyncHandler(async (req, res) => {
   const profile = await profileModel.getByUserId(req.user.id);
@@ -67,4 +86,31 @@ const seekerCv = asyncHandler(async (req, res) => {
   res.render('jobseeker/cv', { title: 'My CV', section: 'cv', profile });
 });
 
-module.exports = { home, browseJobs, jobDetails, login, register, seekerProfile, seekerCv, accountSettings };
+const seekerApplications = asyncHandler(async (req, res) => {
+  const applications = await applicationModel.listBySeeker(req.user.id);
+  res.render('jobseeker/applications', { title: 'My applications', section: 'applications', applications });
+});
+
+const seekerApplicationDetails = asyncHandler(async (req, res) => {
+  const application = await getAccessibleApplication(req);
+  res.render('jobseeker/application-details', {
+    title: `${application.job_title} application`,
+    section: 'applications',
+    application,
+  });
+});
+
+module.exports = {
+  home,
+  browseJobs,
+  jobDetails,
+  login,
+  register,
+  dashboardRedirect,
+  accountSettings,
+  seekerDashboard,
+  seekerProfile,
+  seekerCv,
+  seekerApplications,
+  seekerApplicationDetails,
+};

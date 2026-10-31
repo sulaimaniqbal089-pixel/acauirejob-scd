@@ -1,0 +1,25 @@
+<%# Job seeker's applications. Usage: include('../partials/seeker-applications-table', { applications }) %>
+<% if (!applications.length) { %>
+  <div class="empty">
+    <h3 class="empty__title">No applications yet</h3>
+    <p>When you apply for a job it will show up here with its current status.</p>
+    <a class="btn btn--primary" href="/jobs">Browse jobs</a>
+  </div>
+<% } else { %>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Job</th><th>Company</th><th>Applied</th><th>Status</th><th><span class="sr-only">Actions</span></th></tr></thead>
+      <tbody>
+        <% applications.forEach((application) => { %>
+          <tr>
+            <td data-label="Job"><a class="table__link" href="/seeker/applications/<%= application.id %>"><%= application.job_title %></a><br><span class="muted"><%= application.job_location %>, <%= application.employment_type %></span></td>
+            <td data-label="Company"><%= application.company_name %></td>
+            <td data-label="Applied"><%= fmt.formatDate(application.created_at) %></td>
+            <td data-label="Status"><%- include('status-badge', { status: application.status }) %></td>
+            <td class="table__actions"><a class="btn btn--outline btn--sm" href="/seeker/applications/<%= application.id %>">Open</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>

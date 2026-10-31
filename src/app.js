@@ -49,6 +49,7 @@ app.use(viewLocals);
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/profile', require('./routes/profileRoutes'));
 app.use('/api/jobs', require('./routes/jobRoutes'));
+app.use('/api/applications', require('./routes/applicationRoutes'));
 
 // HTML pages
 app.use('/', require('./routes/pageRoutes'));

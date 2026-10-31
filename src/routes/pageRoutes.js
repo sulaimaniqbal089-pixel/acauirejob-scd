@@ -14,11 +14,15 @@ router.get('/jobs/:id', page.jobDetails);
 router.get('/login', page.login);
 router.get('/register', page.register);
 
-// Account
+// Any logged-in user
+router.get('/dashboard', requireLogin, page.dashboardRedirect);
 router.get('/account/settings', requireLogin, page.accountSettings);
 
 // Job seeker
+router.get('/seeker/dashboard', seekerOnly, page.seekerDashboard);
 router.get('/seeker/profile', seekerOnly, page.seekerProfile);
 router.get('/seeker/cv', seekerOnly, page.seekerCv);
+router.get('/seeker/applications', seekerOnly, page.seekerApplications);
+router.get('/seeker/applications/:id', seekerOnly, page.seekerApplicationDetails);
 
 module.exports = router;
